@@ -59,6 +59,14 @@ cursor:pointer;
 </div>
 
 <script>
+const password = prompt("Masukkan Password Admin");
+
+if(password !== "toso123"){
+alert("Password salah!");
+location.href="index.html";
+}
+</script>
+  
 async function uploadPost(){
 
 const title = document.getElementById('title').value;
