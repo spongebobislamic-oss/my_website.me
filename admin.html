@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Admin</title>
+
+<style>
+body{
+background:#0f0f0f;
+font-family:Arial;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.panel{
+background:#1b1b1b;
+padding:25px;
+border-radius:20px;
+width:350px;
+}
+
+input,textarea{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+background:#2a2a2a;
+color:white;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#0051ff;
+border:none;
+color:white;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="panel">
+<h2>📤 Upload Konten</h2>
+
+<input type="text" id="title" placeholder="Judul">
+<textarea id="desc" placeholder="Deskripsi"></textarea>
+<input type="text" id="image" placeholder="Link Gambar">
+
+<button onclick="uploadPost()">UPLOAD</button>
+</div>
+
+<script>
+async function uploadPost(){
+
+const title = document.getElementById('title').value;
+const desc = document.getElementById('desc').value;
+const image = document.getElementById('image').value;
+
+const token = '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';
+const username = 'spongebobislamic-oss';
+const repo = 'my_website.me';
+
+const url = `https://api.github.com/repos/${username}/${repo}/contents/data.json`;
+
+const oldData = await fetch('data.json').then(r=>r.json());
+
+oldData.push({title,desc,image});
+
+const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(oldData,null,2))));
+
+const fileData = await fetch(url,{
+headers:{
+Authorization:`token ${token}`
+}
+}).then(r=>r.json());
+
+await fetch(url,{
+method:'PUT',
+headers:{
+Authorization:`token ${token}`,
+'Content-Type':'application/json'
+},
+body:JSON.stringify({
+message:'Upload konten baru',
+content:newContent,
+sha:fileData.sha
+})
+});
+
+alert('Konten berhasil diupload 🔥');
+location.href='index.html';
+}
+</script>
+
+</body>
+  </html>
